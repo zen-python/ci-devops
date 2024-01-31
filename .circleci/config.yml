@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Build
           command: |
-            if [ $CIRCLE_BRANCH = 'devel' ]; then
+            if [ $CIRCLE_BRANCH = 'stage' ]; then
               npm run build
             fi
       - persist_to_workspace:
@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            if [ $CIRCLE_BRANCH = 'devel' ]; then
+            if [ $CIRCLE_BRANCH = 'stage' ]; then
               aws s3 sync build s3://$CIRCLE_BRANCH-application-bucket-rdicidr --delete --exact-timestamps;
             fi
 workflows:
@@ -58,11 +58,11 @@ workflows:
           filters:
             branches:
               only:
-                - devel
+                - stage
       - deploy:
           requires:
             - build
           filters:
             branches:
               only:
-                - devel
+                - stage
